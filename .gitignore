@@ -1,3 +1,6 @@
+# intellij files
+.idea
+
 # Unwanted files
 target
 Cargo.lock

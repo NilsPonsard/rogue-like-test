@@ -2,6 +2,7 @@ use ggez::event;
 use ggez::{ContextBuilder, GameResult};
 
 mod game_state;
+mod game_world;
 
 fn main() -> GameResult {
     let resource_dir = if let Ok(manifest_dir) = std::env::var("CARGO_MANIFEST_DIR") {

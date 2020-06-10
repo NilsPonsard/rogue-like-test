@@ -3,6 +3,8 @@ use ggez::event::{KeyCode, KeyMods};
 use ggez::{graphics, Context, ContextBuilder, GameResult};
 use std::time::{Duration, Instant};
 
+use crate::game_world;
+
 pub const UPDATES_PER_SECOND: f32 = 60.0;
 pub const MILLIS_PER_UPDATE: u64 = (1.0 / UPDATES_PER_SECOND * 1000.0) as u64;
 
@@ -17,7 +19,6 @@ impl Assets {
         let player_image = graphics::Image::new(ctx, "/assets/player/placeholder.png")?;
         // let shot_image = graphics::Image::new(ctx, "/shot.png")?;
         // let rock_image = graphics::Image::new(ctx, "/rock.png")?;
-
         Ok(Assets {
             player_image,
             // shot_image,
@@ -32,6 +33,7 @@ struct Direction {
     up: bool,
     down: bool,
 }
+
 impl Direction {
     pub fn new() -> Direction {
         Direction {
