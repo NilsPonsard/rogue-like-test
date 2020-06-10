@@ -2,11 +2,16 @@ use ggez::event::{self, EventHandler};
 use ggez::event::{KeyCode, KeyMods};
 use ggez::{graphics, Context, ContextBuilder, GameResult};
 use std::time::{Duration, Instant};
-
+extern crate mint;
 use crate::game_world;
 
 pub const UPDATES_PER_SECOND: f32 = 60.0;
 pub const MILLIS_PER_UPDATE: u64 = (1.0 / UPDATES_PER_SECOND * 1000.0) as u64;
+
+pub const VIEWPORT_WIDTH: f32 = 320.0;
+pub const VIEWPORT_HEIGHT: f32 = 180.0;
+
+pub const TILE_SIZE: usize = 16;
 
 struct Assets {
     player_image: graphics::Image,
@@ -51,12 +56,14 @@ pub struct MainState {
     dir: Direction,
     last_update: Instant,
     assets: Assets,
+    world: game_world::GameWorld,
 }
 
 impl MainState {
     pub fn new(ctx: &mut Context) -> GameResult<MainState> {
         println!("Game resource path: {:?}", ctx.filesystem);
         let assets = Assets::new(ctx)?;
+        let world = game_world::GameWorld::new(ctx, 40, 40)?;
 
         let s = MainState {
             x: 0.0,
@@ -64,6 +71,7 @@ impl MainState {
             dir: Direction::new(),
             last_update: Instant::now(),
             assets,
+            world,
         };
         Ok(s)
     }
@@ -90,6 +98,7 @@ impl EventHandler for MainState {
 
     fn draw(&mut self, ctx: &mut Context) -> GameResult<()> {
         graphics::clear(ctx, graphics::WHITE);
+        self.world.draw(ctx)?;
         {
             let drawparams =
                 graphics::DrawParam::new().dest(ggez::nalgebra::Point2::new(self.x, self.y));
